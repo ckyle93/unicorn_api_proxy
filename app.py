@@ -9,8 +9,8 @@ Probably better way to do this, but for now this will do.
 """
 
 __author__ = 'Inigo Montoya (inigo.montoya@unicornrentals.click)'
-__vcs_id__ = 'bd3a0223315adc19801225bdde1c1eb7'
-__version__ = '01273c9bf05a8973e45c27e7ed282dc7'
+__vcs_id__ = 'dd31f4f090f0101c49e3f655a0544964'
+__version__ = 'c7016e5b39b2b585bff85479063c017c'
 
 from flask import Flask, request
 from flask_restful import Resource, Api
@@ -82,7 +82,7 @@ class Unicorns(Resource):
         #This is how our teams performance is measured - if this doent work we will not have a job long
         shared_secret = get_secret()
         headers = {'x-unicorn-api-secret': shared_secret}
-        req = requests.get(BACKEND_API+'/unicorn/'+unicorn_id, headers=headers)
+        req = requests.get(BACKEND_API+'/unicorns/'+unicorn_id, headers=headers)
         return json.loads(req.text), req.status_code, {'x-unicorn-api-secret': shared_secret}
 
     def post(self, unicorn_id):
@@ -90,13 +90,13 @@ class Unicorns(Resource):
         #Also needs a "teamid"
         #API secured by secrets the AWS unicorns have
         data = request.get_json()
-        req = requests.post(BACKEND_API+'/unicorn/'+unicorn_id, json={'snack':data['snack'],'teamid':data['teamid']})
+        req = requests.post(BACKEND_API+'/unicorns/'+unicorn_id, json={'snack':data['snack'],'teamid':data['teamid']})
         return req.json(), req.status_code
 
 
 api.add_resource(HealthCheck,'/healthcheck','/')
 api.add_resource(Unicorn, '/unicorn')
-api.add_resource(Unicorns, '/unicorn/<string:unicorn_id>')
+api.add_resource(Unicorns, '/unicorns/<string:unicorn_id>')
 
 
 if __name__ == '__main__':
